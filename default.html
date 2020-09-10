@@ -1,0 +1,24 @@
+ <div v-show="ruleForm.upload" class="upload_fileBox">
+    <img class="upload_fileImg" src="../../../assets/image/compressed.png" alt="">
+    <div style="float: left; margin-left: 0.14rem;">
+      <p class="upload_filename">{{ruleForm.upload}}</p>
+      <p class="upload_filesize">{{ruleForm.fileSize | sizeformat}}</p>
+    </div>
+    <div @click="delFile" class="upload_fileDel">
+      <i class="el-icon-delete"></i>
+    </div>
+
+  </div>
+  <el-upload class="upload-demo" action="#" accept=".zip,.7z,.tar" :on-change="handleChange"
+    :show-file-list=false :http-request="defaultUp">
+    <file-type v-show="!ruleForm.upload"></file-type>
+    <p class="upload_abs" v-show="ruleForm.upload"><i class="icons_plus el-icon-plus"></i>重新上传</p>
+  </el-upload>
+
+   style="position: relative;"
+
+  // 删除已选择文件
+    delFile() {
+      this.ruleForm.upload = ''
+      this.ruleForm.fileSize = ''
+    },

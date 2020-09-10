@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <!-- <div class="Breadcrumb">el-checkbox实现复选框的回显与循环创建</div> -->
+    <!-- <div class="Breadcrumb"></div> -->
     <div class="title">
       <div class="navBox">
         <a-steps :current="1" size="small">
@@ -20,7 +20,7 @@
           <div class="listBox" v-for="(item, firIndex) in listData" :key="firIndex"
             :style="{'height':item.isShow ? '.8rem' : '3.22rem'}">
             <p class="titles">
-              <el-checkbox :indeterminate="item.isIndeterminate && !item.mychecked" v-model="item.mychecked" @change="firstChanged(firIndex)"></el-checkbox><span class="des"
+              <el-checkbox :indeterminate="item.isIndeterminate" v-model="item.mychecked" @change="firstChanged(firIndex)"></el-checkbox><span class="des"
                 @click="showMenuFn(item)">{{item.topic || '其他'}}</span><i @click="showMenuFn(item)"
                 class="el-icon-arrow-down" style="font-size: 0.14rem; margin-left: 0.08rem;"
                 :class="item.isShow ? 'drop_operation180' : 'drop_operation0'"></i>
@@ -120,7 +120,6 @@
                 'mychecked': next.mychecked,
               }), all) : [...all, {
                 'topic': next.topic,
-                'isIndeterminate': next.isIndeterminate,
                 'listArr': [{
                   'id': `${next.id}`,
                   'name': `${next.name}`,
@@ -130,13 +129,14 @@
                 }]
               }]
           }, []);
-
           for (var i = 0; i < result.length; i++) {
             let flag = true
             for (var j = 0; j < result[i].listArr.length; j++) {
               let listChild = result[i].listArr[j]
               if(listChild.mychecked === undefined) {
                 flag = false
+              }else{
+                result[i]["isIndeterminate"] = true;
               }
               if(!result[i].listArr[j].hasOwnProperty('mychecked')) {
                 result[i].listArr[j]["mychecked"] = false;
@@ -149,6 +149,7 @@
               result[i]["mychecked"] = false;
             }
           }
+          console.log(result, 'result ')
           this.listData = result
         }
       },
@@ -198,13 +199,15 @@
             }
           } //一级选中  则对应的二级都选中
         } else if (this.listData[index].mychecked = true) {
+          this.listData[index].isIndeterminate = false;
           var childrenArray = this.listData[index].listArr;
           if (childrenArray) {
             for (var i = 0, len = childrenArray.length; i < len; i++) {
               childrenArray[i].mychecked = true;
             }
-          }
+          }          
         }
+        console.log(this.listData[index], 88)
       },
       //二级change事件
       secondChanged(firIndex) {
@@ -215,9 +218,11 @@
         for (var i = 0; i < len; i++) {
           if (childrenArray[i].mychecked == true) {
             tickCount++;
+            this.listData[firIndex].isIndeterminate = true;
           }
           if (childrenArray[i].mychecked == false) {
             unTickCount++;
+            this.listData[firIndex].isIndeterminate = true;
           }
         }
         if (tickCount == len) { //二级全勾选  一级勾选            
