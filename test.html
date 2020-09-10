@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+    <style>
+    *{
+    	 margin:0;
+        padding:0;
+        list-style: none;
+    }
+    body{
+        margin:0;
+        padding:0;
+        list-style: none;
+    }   
+        #wrap {
+            overflow: hidden; *zoom: 1;
+        }
+        #content ,#sidebar {
+            #eee; 
+        }
+        #sidebar {
+            float: left; width: 300px;
+            background-color:pink;
+            position:fixed;
+            top:0px;
+            left:0;
+        }
+        #sidebar ul li {
+        	line-height: 40px;
+        	text-align: center;
+        }
+        #content {
+            margin-left: 310px;
+            height:1000px;
+            background-color:#e456aa;
+        }
+
+    </style>
+ 
+ </head>
+ <body>
+    <div id="wrap">
+
+        <div id="sidebar" style="height:600px;">
+        	<ul id="uls">
+        		<li>/admin/scene</li>
+        		<li>/admin/pmts</li>
+        		<li>/admin/wmts</li>
+        		<li>/admin/dem</li>
+        		<li>/admin/uplist</li>
+        	</ul>
+        </div>
+         
+        <div id="content" style="height:600px;">
+        	 <iframe src='http://localhost:8888' id="myframe" onload = "changeHeight()"></iframe>
+        </div>
+    </div>
+ </body>    
+</html>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.6.3/jquery.js"></script>
+<script>
+	window.onload = function(){
+	 	let child = document.getElementById('myframe')
+	 	$(function(){
+	 			$('li').click(function(){
+		 			child.contentWindow.postMessage($(this).html(), 
+                "http://localhost:8888")
+		 	})
+	 	})      
+  }
+  function changeHeight () {
+      const ifm = document.getElementById('myframe')
+      ifm.height = document.documentElement.clientHeight
+      ifm.width = document.documentElement.clientWidth
+  }
+  window.onresize = function () {
+      changeHeight()
+  }
+
+
+
+  </script>
